@@ -3,7 +3,7 @@ import Extra_modules as extmod
 import mysql.connector
 import time # only function used is sleep
 import threading # only the thread is used
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='xxxxxx',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 # THE PROGRAM CAN ONLY DEAL WITH EVENTS IN ONE DAY
 # does not check overlap of duration part
