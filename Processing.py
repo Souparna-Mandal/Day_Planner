@@ -5,7 +5,7 @@ import Datecheck_and_timecheck as Datecheck
 import Extra_modules as extmod
 import matplotlib.pyplot as matplotlib
 import time
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='xxxxxx',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 
 class Processing(threading.Thread):# the thread is to run the program that checks for event time in parallel
