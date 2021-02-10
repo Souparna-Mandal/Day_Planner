@@ -2,7 +2,7 @@ import Datecheck_and_timecheck as Datecheck
 import Extra_modules as ext_mod
 import mysql.connector
 import Events_Module_Input as mainmod
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='xxxxx',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 
 
