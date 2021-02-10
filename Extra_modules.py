@@ -1,5 +1,5 @@
 import mysql.connector
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='root',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 
 def check_input(invar, *condition) :# the star makes it a variable length arguement #checks for validity of input

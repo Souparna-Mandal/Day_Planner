@@ -2,7 +2,7 @@ import Datecheck_and_timecheck as Datecheck
 import Extra_modules as ext_mod
 import mysql.connector
 import Events_Module_Input as mainmod
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='root',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 
 
@@ -163,89 +163,92 @@ class Update(Output):
         self.table_name_setter(self.date_choice)
         try:
             self.show_schedule(command="select Event_name,%s,Time,Duration,Detail from {}",ind_var=("notes",))
+            var=True
         except mysql.connector.Error: # catches all mysql errors
             print("There Are No Events Schedule For This Day\n\n")
-        flag=False
-        while flag==False:
-            print("\n\n Enter the Sl_NO of the event you would like to Update:")
-            try :
-                self.choice2=int(input())
-                flag=True
-            except ValueError:
-                print("\n\nIncorrect Input for SL_NO\n\n")
-                flag=False
-        #self.delete_event(date,event_name)
-       # return(True)# if this comes True then run the Input and insert commands
-        print("\n\nEnter the attributes you would to edit from the Following:\n\n1) Event_Name\n\n2) Alarm \n\n3) Notes \n\n4) Time \n\n5) Type\n\n6) Duration ")#todo edit this
-        list=[]
-        for i in range(1,7):
-            try :
-                num=int(input("\n\nEnter your choice (Please not to enter an integer from 1 to 5)\nElse Enter 0 when you have entered all the attributes you wish to change :"))
-                if num not in list and num>=1 and num<=6 :
-                    list.append(self.data_list[num-1])
-                elif num==0:
-                    break
-            except ValueError:
-                print("The Input Is Invalid, Please re Enter your Choice")
-        curs.execute("Select * from {};".format(self.tablename))
-        self.data_of_record=curs.fetchall()
-        curs.execute(("Delete from {} where Event_name='{}' and Time='{}';".format(self.tablename,self.data_of_record[0][0],self.data_of_record[0][3])))
-        mydb.commit()
-        obj1=mainmod.Event()
-        if "Event_Name"in list :  # did not use elif as i want it to check all conditions
-            obj1.eventname_input()
-            self.eventname=obj1.eventname
+            var=False
+        if var==True:
+            flag=False
+            while flag==False:
+                print("\n\n Enter the Sl_NO of the event you would like to Update:")
+                try :
+                    self.choice2=int(input())
+                    flag=True
+                except ValueError:
+                    print("\n\nIncorrect Input for SL_NO\n\n")
+                    flag=False
+            #self.delete_event(date,event_name)
+           # return(True)# if this comes True then run the Input and insert commands
+            print("\n\nEnter the attributes you would to edit from the Following:\n\n1) Event_Name\n\n2) Alarm \n\n3) Notes \n\n4) Time \n\n5) Type\n\n6) Duration ")#todo edit this
+            list=[]
+            for i in range(1,7):
+                try :
+                    num=int(input("\n\nEnter your choice (Please not to enter an integer from 1 to 5)\nElse Enter 0 when you have entered all the attributes you wish to change :"))
+                    if num not in list and num>=1 and num<=6 :
+                        list.append(self.data_list[num-1])
+                    elif num==0:
+                        break
+                except ValueError:
+                    print("The Input Is Invalid, Please re Enter your Choice")
+            curs.execute("Select * from {};".format(self.tablename))
+            self.data_of_record=curs.fetchall()
+            curs.execute(("Delete from {} where Event_name='{}' and Time='{}';".format(self.tablename,self.data_of_record[0][0],self.data_of_record[0][3])))
+            mydb.commit()
+            obj1=mainmod.Event()
+            if "Event_Name"in list :  # did not use elif as i want it to check all conditions
+                obj1.eventname_input()
+                self.eventname=obj1.eventname
 
-        else:
-            self.eventname=self.data_of_record[0][0]
-
-
-        if "Notes"in list:
-             obj1.notes_input()
-             self.notes=obj1.notes
-
-        else:
-            self.notes=self.data_of_record[0][2]
+            else:
+                self.eventname=self.data_of_record[0][0]
 
 
-        if "Alarm"in list:
-            obj1.alarms()
-            self.alarms=obj1.alarm
+            if "Notes"in list:
+                 obj1.notes_input()
+                 self.notes=obj1.notes
 
-        else:
-            self.alarms=self.data_of_record[0][1]
-
-
-        if "Time"in list:
-            obj1.eventtime()
-            self.time=obj1.time
+            else:
+                self.notes=self.data_of_record[0][2]
 
 
-        else:
-            self.time=self.data_of_record[0][3]
+            if "Alarm"in list:
+                obj1.alarms()
+                self.alarms=obj1.alarm
+
+            else:
+                self.alarms=self.data_of_record[0][1]
 
 
-        if "Duration" in list:
-            obj1.eventdetails()
-            self.detail=obj1.eventdetail# its an integer wont cause issue
+            if "Time"in list:
+                obj1.eventtime()
+                self.time=obj1.time
 
 
-        else:
-            self.detail=self.data_of_record[0][4]
-
-        if "Detail" in list:
-            obj1.eventlength1()
-            self.duration = obj1.eventlength
-
-        else:
-            self.duration = self.data_of_record[0][5]
+            else:
+                self.time=self.data_of_record[0][3]
 
 
-        curs.execute("Insert into {} values('{}','{}','{}','{}',{},'{}');".format(self.tablename,self.eventname,self.alarms,self.notes,self.time,self.duration,self.detail))
-        mydb.commit()
-        print("Your Updated Table is :")
-        #self.tablename will be used
-        self.show_schedule(command="select Event_name,%s,Time,Duration,Detail from {}", ind_var=("notes",))
+            if "Duration" in list:
+                obj1.eventdetails()
+                self.detail=obj1.eventdetail# its an integer wont cause issue
+
+
+            else:
+                self.detail=self.data_of_record[0][4]
+
+            if "Detail" in list:
+                obj1.eventlength1()
+                self.duration = obj1.eventlength
+
+            else:
+                self.duration = self.data_of_record[0][5]
+
+
+            curs.execute("Insert into {} values('{}','{}','{}','{}',{},'{}');".format(self.tablename,self.eventname,self.alarms,self.notes,self.time,self.duration,self.detail))
+            mydb.commit()
+            print("Your Updated Table is :")
+            #self.tablename will be used
+            self.show_schedule(command="select Event_name,%s,Time,Duration,Detail from {}", ind_var=("notes",))
 
 
 
@@ -334,9 +337,4 @@ class Update(Output):
 
 
 
-
-
-    # fuction to view world specific or detail specific tasks
-    # fuction to view the grapgh of the work completed
-    #display the schedule for the entire week
 

@@ -1,6 +1,6 @@
 import mysql.connector
 import math
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='root',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 
 def datecheck(date):# a fuction to check if date input is correct needs improvement in leap year and number of days

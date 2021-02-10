@@ -3,7 +3,7 @@ import Extra_modules as extmod
 import mysql.connector
 import time # only function used is sleep
 import threading # only the thread is used
-mydb=mysql.connector.connect(host='localhost',user='root',password='lemonade1906',db="Cs_project_tes")#later change to Cs_project
+mydb=mysql.connector.connect(host='localhost',user='root',password='root',db="Cs_project_tes")#later change to Cs_project
 curs= mydb.cursor()
 # THE PROGRAM CAN ONLY DEAL WITH EVENTS IN ONE DAY
 # does not check overlap of duration part
@@ -51,7 +51,7 @@ class Event  : # this is a definition of a new class called event
         dayno=0
         while flag == False:
             try:
-                dayno=int(input("Enter the number of days you wish the event to repeat in a week :"))# put a restriction of 7
+                dayno=int(input("Enter the number of days you wish the event to repeat in a week :"))
                 if dayno>7 or dayno<0:
                     print("Invalid input")
                     flag=False
@@ -61,7 +61,7 @@ class Event  : # this is a definition of a new class called event
             except ValueError :
                 print("Invalid Input \n")
                 flag=False
-        # deletes the flag as it is no longer required
+        # deletes the flag as it is no longer required thus automatic garbage collection takes place
         for i in range(dayno):
             flag = False
             day = ""
@@ -69,14 +69,14 @@ class Event  : # this is a definition of a new class called event
                 day = input("Enter a day: ")
                 flag = extmod.check_input(day.upper(),"SUNDAY","MONDAY","TUESDAY","WEDNESDAY","THURSDAY","FRIDAY","SATURDAY","")
 
-            self.dictofdays[self.listofdays[i]]=day.upper() #the day choices of the user is stored as key value pairs
+            self.dictofdays[self.listofdays[i]]=day.upper() #the day choices of the user is stored as key value pairs # traverses through the day of the week as indices
             print("\n")
 
 
     def inputdates(self): # this is a function that checks whether we need to have dates or days in the event
         flag = False
         while flag == False:
-            print("Enter Y if you want it to be scheduled at a particular date,","Else enter N if you wish for it to repeat every week :",sep="\n")
+            print("Enter Y if you want it to be scheduled at a particular date,","Else enter N if you wish for it to repeat ever week :",sep="\n")
             self.choice = str(input())
             print("\n")
             flag = extmod.check_input(self.choice.upper(),"Y","N")  # function from the module extra modules to check validity of input
@@ -296,7 +296,7 @@ class Event  : # this is a definition of a new class called event
     def insertvalues_date_day_everyday(self,table_name,eventname,alarm,notes,time,eventlength,eventdetail):# this function helps to insert the values inputted from the user into the table
         self.tableinsert="insert into {} values({},{},{},{},{},{});"
         curs.execute(self.tableinsert.format(table_name,"'" + str(eventname)+"'","'"+ str(alarm)+"'","'"+ str(notes)+"'","'"+ str(time)+"'", eventlength,"'"+ str(eventdetail)+"'"))
-        mydb.commit()# time is of data type varchar 
+        mydb.commit()# time is of data type varchar
 
     def insertvalues(self):# call this
 
@@ -335,6 +335,8 @@ class Event  : # this is a definition of a new class called event
         self.main_list=[]
         self.e=-1     # i make them class variables so as to remove the problem of the variable scope
         while True:# this loops reads the data from the data file and stores it as a main list
+            if len(temp_list)==0:
+                break
             secondary_list = []
             self.dictofdays2={}
             for i in range(self.e+1,len(temp_list)):
@@ -447,37 +449,16 @@ class Event  : # this is a definition of a new class called event
 
 
 
-class Simultaneous(Event,threading.Thread):
+class Simultaneous(Event,):
     def __init__(self) :
         Event.__init__(self)
-        threading.Thread.__init__(self)
+#        threading.Thread.__init__(self)
         self.table_clearer()
-    def run(self):     # this method will run in a different thread in the background continuously
+    def selfrun(self):     # this method will run in a different thread in the background continuously
         seconds = 59
         self.regular_table_creator()
         self.inservalues_recurring2()
         self.table_clearer()
-#        print("\n\nTHREAD 2 IS RUNNING\n\n")# todo REMEMBER TO REMOVE AS JUST ADDED FOR TESTING
-        while True:  # this makes the event run everyday at midnight
-            currenttime = self.current_date_generator()
-            if currenttime[0:5] == "00:00":
-                self.regular_table_creator()
-                self.inservalues_recurring2()
-                self.table_clearer()
-                time.sleep(60*60)
-
-            time.sleep(seconds)  # loop runs every 59 secs # the reason so as to save memory space but comes with the tradeoff of seconds
-
-
-# create a diff file which will always run in the background
-# in recurring i use already assigned values and automatic name generator automatically generated files
-
-#obj1=Event()
-#obj1.addevents()
-#obj1.class_autocall()
-#time.sleep(1)
-#thr2=Simultaneous()
-#thr2.start()
 
 
 
